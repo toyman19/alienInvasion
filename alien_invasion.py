@@ -21,18 +21,34 @@ class AlienInvasion:
         """Start the main loop for the game"""
         while True:
         #Watch for keyboard and mouse events
-            for event in pygame.event.get():
-                if event.type ==pygame.QUIT:
-                    sys.exit()
+            self._check_events()
+            self._update_screen()
+            self.ship.update()
 
-        #Redraw the screen with my color
-            self.screen.fill(self.settings.bg_color)
+    def _check_events(self):
+        """This is a helper method, helper methods run in classes
+        but aren't meant to be called through an instance"""
+        for event in pygame.event.get():
+            if event.type ==pygame.QUIT:
+                sys.exit()
+            elif event.type ==pygame.KEYDOWN:
+                if event.key == pygame.K_RIGHT:
+                    self.ship.moving_right = True
+                elif event.key == pygame.K_LEFT:
+                    self.ship.moving_left = True
+            elif event.type == pygame.KEYUP:
+                if event.key == pygame.K_RIGHT:
+                    self.ship.moving_right = False
 
-        #Spawn player ship
-            self.ship.blitme()
 
-        # Make most recently drawn screen visible
-            pygame.display.flip()
+    def _update_screen(self):
+        """ Update images on the screen """
+    #Redraw the screen with my color
+        self.screen.fill(self.settings.bg_color)
+    #Spawn player ship
+        self.ship.blitme()
+    # Make most recently drawn screen visible
+        pygame.display.flip()
 
 if __name__=='__main__':
     # Make a game instance and run the game
