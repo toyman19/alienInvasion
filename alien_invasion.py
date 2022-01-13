@@ -28,8 +28,16 @@ class AlienInvasion:
         #Watch for keyboard and mouse events
             self._check_events()
             self.ship.update()
-            self.bullets.update()
+            self._update_bullets()
             self._update_screen()
+
+    def _update_bullets(self):
+        """ Get rid of bullets out of the screen and update bullet position"""
+        self.bullets.update()
+        # We need to make a copy as the 'size' of the list or group cannot change within a for loop
+        for bullet in self.bullets.copy():
+            if bullet.rect.bottom <= 0:
+                self.bullets.remove(bullet)
 
     def _check_events(self):
         """This is a helper method, helper methods run in classes
@@ -62,8 +70,9 @@ class AlienInvasion:
 
     def _fire_bullet(self):
         """Create a new bullet and add it to the bullets group"""
-        new_bullet = Bullet(self)
-        self.bullets.add(new_bullet)
+        if len(self.bullets) < self.settings.bullets_allowed:
+            new_bullet = Bullet(self)
+            self.bullets.add(new_bullet)
 
     def _update_screen(self):
         """ Update images on the screen """
@@ -77,8 +86,6 @@ class AlienInvasion:
 
     # Make most recently drawn screen visible
         pygame.display.flip()
-
-
 
 if __name__=='__main__':
     # Make a game instance and run the game
